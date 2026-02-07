@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tagihan Kas - Admin Sekolah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9f0',
+                            100: '#dbf0db',
+                            200: '#b8e0b8',
+                            300: '#88ca88',
+                            400: '#56ab56',
+                            500: '#3d8f3d',
+                            600: '#2f712f',
+                            700: '#285a28',
+                            800: '#234823',
+                            900: '#1d3b1d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Sidebar -->
+    <div class="flex">
+        <div class="fixed inset-y-0 left-0 bg-white w-64 shadow-lg border-r border-gray-100 transform transition-transform duration-300 ease-in-out z-30">
+            <div class="flex items-center justify-center h-16 bg-gradient-to-r from-primary-500 to-primary-700">
+                <div class="flex items-center space-x-2">
+                    <i class="ri-bank-line text-white text-2xl"></i>
+                    <span class="text-white font-bold text-xl">Kas Sekolah</span>
+                </div>
+            </div>
+
+            <nav class="mt-8 px-4">
+                <div class="mb-6">
+                    <p class="text-xs uppercase text-gray-500 font-semibold tracking-wider pl-3 mb-2">Menu Utama</p>
+                    <a href="admin.html" class="flex items-center py-3 px-3 text-gray-700 hover:bg-gray-100 rounded-lg mb-1">
+                        <i class="ri-dashboard-line mr-3 text-lg"></i>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+                    <a href="tagihan.html" class="flex items-center py-3 px-3 bg-primary-50 text-primary-700 rounded-lg mb-1">
+                        <i class="ri-bill-line mr-3 text-lg"></i>
+                        <span class="font-medium">Tagihan Kas</span>
+                    </a>
+                    <a href="transaksi.html" class="flex items-center py-3 px-3 text-gray-700 hover:bg-gray-100 rounded-lg mb-1">
+                        <i class="ri-exchange-dollar-line mr-3 text-lg"></i>
+                        <span class="font-medium">Konfirmasi Transaksi</span>
+                    </a>
+                    <a href="rekapitulasi.html" class="flex items-center py-3 px-3 text-gray-700 hover:bg-gray-100 rounded-lg mb-1">
+                        <i class="ri-file-chart-line mr-3 text-lg"></i>
+                        <span class="font-medium">Rekapitulasi</span>
+                    </a>
+                </div>
+
+                <div class="mb-6">
+                    <p class="text-xs uppercase text-gray-500 font-semibold tracking-wider pl-3 mb-2">Akun</p>
+                    <a href="#" class="flex items-center py-3 px-3 text-gray-700 hover:bg-gray-100 rounded-lg mb-1">
+                        <i class="ri-user-line mr-3 text-lg"></i>
+                        <span class="font-medium">Profil Saya</span>
+                    </a>
+                    <a href="#" class="flex items-center py-3 px-3 text-gray-700 hover:bg-gray-100 rounded-lg mb-1">
+                        <i class="ri-logout-box-line mr-3 text-lg"></i>
+                        <span class="font-medium">Keluar</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="ml-64 flex-1 p-6">
+            <!-- Header -->
+            <header class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Tagihan Kas</h1>
+                    <p class="text-gray-600">Kelola tagihan kas untuk semua kelas</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex space-x-2">
+                        <button onclick="openCreateModal('single')" class="bg-gradient-to-r from-primary-500 to-primary-700 text-white px-5 py-2.5 rounded-lg font-medium flex items-center hover:opacity-90 transition-opacity">
+                            <i class="ri-add-line mr-2"></i> Tagihan Per Kelas
+                        </button>
+                        <button onclick="openCreateModal('bulk')" class="bg-gradient-to-r from-green-500 to-green-700 text-white px-5 py-2.5 rounded-lg font-medium flex items-center hover:opacity-90 transition-opacity">
+                            <i class="ri-add-circle-line mr-2"></i> Tagihan Semua Kelas
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="h-10 w-10 bg-gradient-to-r from-primary-500 to-primary-700 rounded-full flex items-center justify-center text-white font-bold">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Info Tagihan Aktif -->
+            <div class="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-5 mb-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                            <i class="ri-information-line text-blue-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800">Tagihan Aktif Bulan Ini</h3>
+                            <p class="text-gray-600 text-sm">November 2024: 24 tagihan aktif dari 30 kelas</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl font-bold text-gray-800">Rp 12.450.000</p>
+                        <p class="text-gray-600 text-sm">Total tagihan aktif</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter dan Pencarian -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Cari Tagihan</label>
+                        <div class="relative">
+                            <input type="text" id="searchInput" class="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Cari kelas atau nominal...">
+                            <i class="ri-search-line absolute left-3 top-3.5 text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tingkat Kelas</label>
+                        <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                            <option value="">Semua Tingkat</option>
+                            <option value="X">Kelas X</option>
+                            <option value="XI">Kelas XI</option>
+                            <option value="XII">Kelas XII</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <select class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                            <option value="">Semua Status</option>
+                            <option value="aktif">Aktif</option>
+                            <option value="lunas">Lunas</option>
+                            <option value="jatuh_tempo">Jatuh Tempo</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-end">
+                        <button class="w-full bg-primary-50 text-primary-700 border border-primary-200 px-4 py-2.5 rounded-lg font-medium hover:bg-primary-100 transition-colors">
+                            <i class="ri-filter-line mr-2"></i> Terapkan Filter
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabel Tagihan -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                    <h2 class="text-lg font-bold text-gray-800">Daftar Tagihan Kas</h2>
+                    <div class="text-sm text-gray-500">
+                        Total: <span class="font-bold text-gray-800">24 Tagihan</span>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table id="tagihanTable" class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nominal</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Periode</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jatuh Tempo</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">X IPA 1</div>
+                                    <div class="text-sm text-gray-500">35 Siswa</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">Rp 150.000</div>
+                                    <div class="text-sm text-gray-500">Per siswa</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">November 2024</div>
+                                    <div class="text-sm text-gray-500">Kas Bulanan</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">15 Nov 2024</div>
+                                    <div class="text-sm text-gray-500">2 hari lagi</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Lunas</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button class="text-primary-600 hover:text-primary-900 mr-3" onclick="editTagihan(1)">
+                                        <i class="ri-edit-line"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-900 mr-3" onclick="deleteTagihan(1)">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </button>
+                                    <button class="text-gray-600 hover:text-gray-900">
+                                        <i class="ri-eye-line"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">X IPA 2</div>
+                                    <div class="text-sm text-gray-500">32 Siswa</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">Rp 150.000</div>
+                                    <div class="text-sm text-gray-500">Per siswa</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">November 2024</div>
+                                    <div class="text-sm text-gray-500">Kas Bulanan</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">15 Nov 2024</div>
+                                    <div class="text-sm text-gray-500">2 hari lagi</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Proses</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button class="text-primary-600 hover:text-primary-900 mr-3" onclick="editTagihan(2)">
+                                        <i class="ri-edit-line"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-900 mr-3" onclick="deleteTagihan(2)">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </button>
+                                    <button class="text-gray-600 hover:text-gray-900">
+                                        <i class="ri-eye-line"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">XI IPS 1</div>
+                                    <div class="text-sm text-gray-500">30 Siswa</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">Rp 200.000</div>
+                                    <div class="text-sm text-gray-500">Per siswa</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">November 2024</div>
+                                    <div class="text-sm text-gray-500">Kas Bulanan</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">10 Nov 2024</div>
+                                    <div class="text-sm text-gray-500">Lewat 3 hari</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Jatuh Tempo</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button class="text-primary-600 hover:text-primary-900 mr-3" onclick="editTagihan(3)">
+                                        <i class="ri-edit-line"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-900 mr-3" onclick="deleteTagihan(3)">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </button>
+                                    <button class="text-gray-600 hover:text-gray-900">
+                                        <i class="ri-eye-line"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">XII IPA 3</div>
+                                    <div class="text-sm text-gray-500">28 Siswa</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">Rp 250.000</div>
+                                    <div class="text-sm text-gray-500">Per siswa</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">November 2024</div>
+                                    <div class="text-sm text-gray-500">Kas Bulanan</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">20 Nov 2024</div>
+                                    <div class="text-sm text-gray-500">7 hari lagi</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Aktif</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button class="text-primary-600 hover:text-primary-900 mr-3" onclick="editTagihan(4)">
+                                        <i class="ri-edit-line"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-900 mr-3" onclick="deleteTagihan(4)">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </button>
+                                    <button class="text-gray-600 hover:text-gray-900">
+                                        <i class="ri-eye-line"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="px-6 py-4 border-t border-gray-100 flex justify-between items-center">
+                    <div class="text-sm text-gray-500">
+                        Menampilkan <span class="font-medium">4</span> dari <span class="font-medium">24</span> tagihan
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">Sebelumnya</button>
+                        <button class="px-3 py-1.5 border border-primary-500 bg-primary-50 text-primary-700 rounded-lg text-sm font-medium">1</button>
+                        <button class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">2</button>
+                        <button class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">3</button>
+                        <button class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-8 pt-6 border-t border-gray-200 text-center text-gray-500 text-sm">
+                <p>© 2024 Admin Web Kas Sekolah. Sistem manajemen kas sekolah terintegrasi.</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Modal Create Tagihan Per Kelas -->
+    <div id="createModalSingle" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-4">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-gray-800">Buat Tagihan Per Kelas</h3>
+                <button onclick="closeCreateModal('single')" class="text-gray-500 hover:text-gray-700">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <form id="createFormSingle">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
+                            <select class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                                <option value="">Pilih Kelas</option>
+                                <option value="X IPA 1">X IPA 1</option>
+                                <option value="X IPA 2">X IPA 2</option>
+                                <option value="X IPA 3">X IPA 3</option>
+                                <option value="X IPS 1">X IPS 1</option>
+                                <option value="X IPS 2">X IPS 2</option>
+                                <option value="XI IPA 1">XI IPA 1</option>
+                                <option value="XI IPA 2">XI IPA 2</option>
+                                <option value="XI IPA 3">XI IPA 3</option>
+                                <option value="XI IPS 1">XI IPS 1</option>
+                                <option value="XI IPS 2">XI IPS 2</option>
+                                <option value="XII IPA 1">XII IPA 1</option>
+                                <option value="XII IPA 2">XII IPA 2</option>
+                                <option value="XII IPA 3">XII IPA 3</option>
+                                <option value="XII IPS 1">XII IPS 1</option>
+                                <option value="XII IPS 2">XII IPS 2</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Tagihan</label>
+                            <select class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                                <option value="">Pilih Jenis</option>
+                                <option value="bulanan">Kas Bulanan</option>
+                                <option value="kegiatan">Kas Kegiatan</option>
+                                <option value="sumbangan">Sumbangan</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nominal per Siswa</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <span class="text-gray-500">Rp</span>
+                                </div>
+                                <input type="number" class="w-full border border-gray-300 rounded-lg pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Periode</label>
+                            <input type="month" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jatuh Tempo</label>
+                            <input type="date" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+                            <select class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                                <option value="">Pilih Metode</option>
+                                <option value="transfer">Transfer Bank</option>
+                                <option value="tunai">Tunai</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan</label>
+                        <textarea class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" rows="3" placeholder="Tambahkan keterangan (opsional)"></textarea>
+                    </div>
+
+                    <div class="mt-8 flex justify-end space-x-4">
+                        <button type="button" onclick="closeCreateModal('single')" class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50">Batal</button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-700 text-white font-medium rounded-lg hover:opacity-90">Simpan Tagihan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Create Tagihan Semua Kelas -->
+    <div id="createModalBulk" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl mx-4">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-gray-800">Buat Tagihan Untuk Semua Kelas</h3>
+                <button onclick="closeCreateModal('bulk')" class="text-gray-500 hover:text-gray-700">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <form id="createFormBulk">
+                    <div class="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="flex items-center">
+                            <i class="ri-information-line text-blue-600 text-xl mr-3"></i>
+                            <div>
+                                <p class="font-medium text-blue-800">Tagihan akan dibuat untuk semua kelas aktif</p>
+                                <p class="text-blue-600 text-sm mt-1">Total: 30 kelas (X, XI, XII)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Tagihan</label>
+                            <select id="bulkJenisTagihan" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                                <option value="">Pilih Jenis</option>
+                                <option value="bulanan">Kas Bulanan</option>
+                                <option value="kegiatan">Kas Kegiatan</option>
+                                <option value="sumbangan">Sumbangan</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Periode</label>
+                            <input type="month" id="bulkPeriode" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jatuh Tempo</label>
+                            <input type="date" id="bulkJatuhTempo" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+                            <select id="bulkMetode" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                                <option value="">Pilih Metode</option>
+                                <option value="transfer">Transfer Bank</option>
+                                <option value="tunai">Tunai</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Setting Nominal per Tingkat -->
+                    <div class="mb-6">
+                        <h4 class="font-bold text-gray-800 mb-4">Atur Nominal per Tingkat Kelas</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-center mb-3">
+                                    <div class="bg-primary-100 text-primary-800 font-bold w-8 h-8 rounded-lg flex items-center justify-center mr-3">X</div>
+                                    <div>
+                                        <p class="font-medium">Kelas X</p>
+                                        <p class="text-sm text-gray-500">10 kelas</p>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-500">Rp</span>
+                                    </div>
+                                    <input type="number" id="nominalX" class="w-full border border-gray-300 rounded-lg pl-12 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0" required>
+                                </div>
+                            </div>
+
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-center mb-3">
+                                    <div class="bg-green-100 text-green-800 font-bold w-8 h-8 rounded-lg flex items-center justify-center mr-3">XI</div>
+                                    <div>
+                                        <p class="font-medium">Kelas XI</p>
+                                        <p class="text-sm text-gray-500">10 kelas</p>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-500">Rp</span>
+                                    </div>
+                                    <input type="number" id="nominalXI" class="w-full border border-gray-300 rounded-lg pl-12 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0" required>
+                                </div>
+                            </div>
+
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex items-center mb-3">
+                                    <div class="bg-blue-100 text-blue-800 font-bold w-8 h-8 rounded-lg flex items-center justify-center mr-3">XII</div>
+                                    <div>
+                                        <p class="font-medium">Kelas XII</p>
+                                        <p class="text-sm text-gray-500">10 kelas</p>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-500">Rp</span>
+                                    </div>
+                                    <input type="number" id="nominalXII" class="w-full border border-gray-300 rounded-lg pl-12 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="0" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan (untuk semua kelas)</label>
+                        <textarea id="bulkKeterangan" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" rows="3" placeholder="Tambahkan keterangan untuk semua tagihan"></textarea>
+                    </div>
+
+                    <div class="mb-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-bold text-gray-800 mb-3">Ringkasan Tagihan</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-primary-600" id="totalKelas">30</p>
+                                <p class="text-gray-600">Total Kelas</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-green-600" id="estimasiTotal">Rp 0</p>
+                                <p class="text-gray-600">Estimasi Total</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-blue-600" id="rataRataBulk">Rp 0</p>
+                                <p class="text-gray-600">Rata-rata per Kelas</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" onclick="closeCreateModal('bulk')" class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50">Batal</button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-green-500 to-green-700 text-white font-medium rounded-lg hover:opacity-90">Buat Tagihan Massal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Preview Tagihan Massal -->
+    <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white">
+                <h3 class="text-xl font-bold text-gray-800">Preview Tagihan Massal</h3>
+                <button onclick="closePreviewModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h4 class="font-bold text-lg text-gray-800">Tagihan Kas Bulanan</h4>
+                            <p class="text-gray-500">Periode: <span id="previewPeriode">November 2024</span></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-500">Jatuh Tempo</p>
+                            <p class="font-bold text-gray-800" id="previewJatuhTempo">15 November 2024</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelas</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tingkat</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Siswa</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nominal/Siswa</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="previewTableBody">
+                            <!-- Data akan diisi oleh JavaScript -->
+                        </tbody>
+                        <tfoot class="bg-gray-50">
+                            <tr>
+                                <td colspan="4" class="px-4 py-3 text-right font-bold text-gray-800">Total Keseluruhan</td>
+                                <td class="px-4 py-3 font-bold text-lg text-primary-600" id="previewTotal">Rp 0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="flex justify-end space-x-4">
+                    <button onclick="closePreviewModal()" class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50">Kembali</button>
+                    <button onclick="confirmBulkCreate()" class="px-6 py-3 bg-gradient-to-r from-green-500 to-green-700 text-white font-medium rounded-lg hover:opacity-90">Konfirmasi & Buat Tagihan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data kelas
+        const kelasData = [
+            { nama: "X IPA 1", tingkat: "X", siswa: 35, waliKelas: "Budi Santoso, S.Pd." },
+            { nama: "X IPA 2", tingkat: "X", siswa: 32, waliKelas: "Siti Aminah, S.Pd." },
+            { nama: "X IPA 3", tingkat: "X", siswa: 30, waliKelas: "Agus Wijaya, S.Pd." },
+            { nama: "X IPS 1", tingkat: "X", siswa: 34, waliKelas: "Dedi Setiawan, S.Pd." },
+            { nama: "X IPS 2", tingkat: "X", siswa: 33, waliKelas: "Eka Putri, S.Pd." },
+            { nama: "XI IPA 1", tingkat: "XI", siswa: 31, waliKelas: "Fajar Nugroho, S.Pd." },
+            { nama: "XI IPA 2", tingkat: "XI", siswa: 33, waliKelas: "Gita Maharani, S.Pd." },
+            { nama: "XI IPA 3", tingkat: "XI", siswa: 29, waliKelas: "Hendra Kurniawan, S.Pd." },
+            { nama: "XI IPS 1", tingkat: "XI", siswa: 30, waliKelas: "Indah Permata, S.Pd." },
+            { nama: "XI IPS 2", tingkat: "XI", siswa: 32, waliKelas: "Joko Susilo, S.Pd." },
+            { nama: "XII IPA 1", tingkat: "XII", siswa: 28, waliKelas: "Kartika Sari, S.Pd." },
+            { nama: "XII IPA 2", tingkat: "XII", siswa: 30, waliKelas: "Lukman Hakim, S.Pd." },
+            { nama: "XII IPA 3", tingkat: "XII", siswa: 28, waliKelas: "Maya Indah, S.Pd." },
+            { nama: "XII IPS 1", tingkat: "XII", siswa: 31, waliKelas: "Nur Hasanah, S.Pd." },
+            { nama: "XII IPS 2", tingkat: "XII", siswa: 29, waliKelas: "Oki Setiawan, S.Pd." }
+        ];
+
+        // Inisialisasi DataTable
+        $(document).ready(function() {
+            $('#tagihanTable').DataTable({
+                pageLength: 10,
+                lengthChange: false,
+                searching: false,
+                info: false,
+                paging: false
+            });
+
+            // Pencarian
+            $('#searchInput').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $('#tagihanTable tbody tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+            // Hitung estimasi tagihan massal
+            document.getElementById('nominalX').addEventListener('input', updateBulkEstimation);
+            document.getElementById('nominalXI').addEventListener('input', updateBulkEstimation);
+            document.getElementById('nominalXII').addEventListener('input', updateBulkEstimation);
+        });
+
+        // Fungsi modal
+        function openCreateModal(type) {
+            if (type === 'single') {
+                document.getElementById('createModalSingle').classList.remove('hidden');
+            } else {
+                document.getElementById('createModalBulk').classList.remove('hidden');
+                updateBulkEstimation();
+            }
+        }
+
+        function closeCreateModal(type) {
+            if (type === 'single') {
+                document.getElementById('createModalSingle').classList.add('hidden');
+                document.getElementById('createFormSingle').reset();
+            } else {
+                document.getElementById('createModalBulk').classList.add('hidden');
+                document.getElementById('createFormBulk').reset();
+            }
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').classList.add('hidden');
+        }
+
+        // Update estimasi tagihan massal
+        function updateBulkEstimation() {
+            const nominalX = parseInt(document.getElementById('nominalX').value) || 0;
+            const nominalXI = parseInt(document.getElementById('nominalXI').value) || 0;
+            const nominalXII = parseInt(document.getElementById('nominalXII').value) || 0;
+
+            // Hitung total per tingkat
+            const kelasX = kelasData.filter(k => k.tingkat === "X");
+            const kelasXI = kelasData.filter(k => k.tingkat === "XI");
+            const kelasXII = kelasData.filter(k => k.tingkat === "XII");
+
+            let totalX = 0, totalXI = 0, totalXII = 0;
+
+            kelasX.forEach(kelas => {
+                totalX += nominalX * kelas.siswa;
+            });
+
+            kelasXI.forEach(kelas => {
+                totalXI += nominalXI * kelas.siswa;
+            });
+
+            kelasXII.forEach(kelas => {
+                totalXII += nominalXII * kelas.siswa;
+            });
+
+            const totalKeseluruhan = totalX + totalXI + totalXII;
+            const totalKelas = kelasData.length;
+            const rataRata = totalKeseluruhan / totalKelas;
+
+            // Update tampilan
+            document.getElementById('totalKelas').textContent = totalKelas;
+            document.getElementById('estimasiTotal').textContent = formatRupiah(totalKeseluruhan);
+            document.getElementById('rataRataBulk').textContent = formatRupiah(Math.round(rataRata));
+        }
+
+        // Fungsi edit tagihan
+        function editTagihan(id) {
+            openCreateModal('single');
+            // Di sini bisa diisi dengan data tagihan yang akan diedit
+            console.log('Edit tagihan dengan ID:', id);
+        }
+
+        // Fungsi hapus tagihan
+        function deleteTagihan(id) {
+            if(confirm('Apakah Anda yakin ingin menghapus tagihan ini?')) {
+                console.log('Hapus tagihan dengan ID:', id);
+                // Di sini bisa ditambahkan logika penghapusan data
+                alert('Tagihan berhasil dihapus!');
+            }
+        }
+
+        // Format Rupiah
+        function formatRupiah(angka) {
+            return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Submit form per kelas
+        document.getElementById('createFormSingle').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Tagihan per kelas berhasil dibuat!');
+            closeCreateModal('single');
+            // Di sini bisa ditambahkan logika penyimpanan data
+        });
+
+        // Submit form massal
+        document.getElementById('createFormBulk').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showPreviewBulk();
+        });
+
+        // Tampilkan preview tagihan massal
+        function showPreviewBulk() {
+            const jenisTagihan = document.getElementById('bulkJenisTagihan').value;
+            const periode = document.getElementById('bulkPeriode').value;
+            const jatuhTempo = document.getElementById('bulkJatuhTempo').value;
+            const nominalX = parseInt(document.getElementById('nominalX').value) || 0;
+            const nominalXI = parseInt(document.getElementById('nominalXI').value) || 0;
+            const nominalXII = parseInt(document.getElementById('nominalXII').value) || 0;
+            const keterangan = document.getElementById('bulkKeterangan').value;
+
+            // Format bulan
+            const bulanNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                               "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            const tahun = periode.split('-')[0];
+            const bulan = parseInt(periode.split('-')[1]);
+
+            // Format tanggal jatuh tempo
+            const dateObj = new Date(jatuhTempo);
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            const formattedDate = dateObj.toLocaleDateString('id-ID', options);
+
+            // Update preview header
+            document.getElementById('previewPeriode').textContent = `${bulanNames[bulan-1]} ${tahun}`;
+            document.getElementById('previewJatuhTempo').textContent = formattedDate;
+
+            // Generate tabel preview
+            const tableBody = document.getElementById('previewTableBody');
+            let html = '';
+            let totalKeseluruhan = 0;
+
+            kelasData.forEach(kelas => {
+                let nominal = 0;
+                if (kelas.tingkat === "X") nominal = nominalX;
+                if (kelas.tingkat === "XI") nominal = nominalXI;
+                if (kelas.tingkat === "XII") nominal = nominalXII;
+
+                const total = nominal * kelas.siswa;
+                totalKeseluruhan += total;
+
+                html += `
+                    <tr>
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <div class="font-medium text-gray-900">${kelas.nama}</div>
+                            <div class="text-sm text-gray-500">${kelas.waliKelas}</div>
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full ${kelas.tingkat === 'X' ? 'bg-primary-100 text-primary-800' : kelas.tingkat === 'XI' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}">
+                                Kelas ${kelas.tingkat}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <div class="text-gray-900">${kelas.siswa} siswa</div>
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <div class="text-gray-900">${formatRupiah(nominal)}</div>
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap">
+                            <div class="font-medium text-gray-900">${formatRupiah(total)}</div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = html;
+            document.getElementById('previewTotal').textContent = formatRupiah(totalKeseluruhan);
+
+            // Tampilkan modal preview
+            document.getElementById('previewModal').classList.remove('hidden');
+        }
+
+        // Konfirmasi pembuatan tagihan massal
+        function confirmBulkCreate() {
+            if(confirm('Apakah Anda yakin ingin membuat tagihan untuk semua kelas?')) {
+                alert('Tagihan massal berhasil dibuat untuk 30 kelas!');
+                closePreviewModal();
+                closeCreateModal('bulk');
+                // Di sini bisa ditambahkan logika penyimpanan data massal
+            }
+        }
+
+        // Tutup modal dengan klik di luar
+        document.getElementById('createModalSingle').addEventListener('click', function(e) {
+            if(e.target === this) {
+                closeCreateModal('single');
+            }
+        });
+
+        document.getElementById('createModalBulk').addEventListener('click', function(e) {
+            if(e.target === this) {
+                closeCreateModal('bulk');
+            }
+        });
+
+        document.getElementById('previewModal').addEventListener('click', function(e) {
+            if(e.target === this) {
+                closePreviewModal();
+            }
+        });
+    </script>
+</body>
+</html>
