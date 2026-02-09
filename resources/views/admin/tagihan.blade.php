@@ -5,7 +5,7 @@
     <div class="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-green-500/10 border border-white/50 overflow-hidden mb-8"
         data-aos="fade-up" data-aos-delay="200">
         <!-- Form Header -->
-        <div class="bg-gradient-to-r from-emerald-500 to-blue-600 px-6 py-5 relative overflow-hidden">
+        <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-5 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
             <div class="relative z-10 flex items-center">
                 <div
@@ -119,7 +119,7 @@
                         <i class="ri-close-line mr-2 text-xl"></i> Batal
                     </a>
                     <button type="submit"
-                        class="px-6 py-3 bg-gradient-to-r from-emerald-600 to-blue-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/60 transform hover:-translate-y-0.5 transition-all duration-300 flex items-center">
+                        class="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/60 transform hover:-translate-y-0.5 transition-all duration-300 flex items-center">
                         <i class="ri-save-line mr-2 text-xl"></i> Simpan Tagihan
                     </button>
                 </div>
@@ -131,14 +131,67 @@
     <div class="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-green-500/10 border border-white/50 overflow-hidden"
         data-aos="fade-up" data-aos-delay="400">
         <div class="px-6 py-5 bg-gradient-to-r from-gray-50 to-green-50/30 border-b border-gray-200">
-            <div class="flex items-center">
-                <div
-                    class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mr-3 shadow-md">
-                    <i class="ri-file-list-3-line text-white text-xl"></i>
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <!-- Left Section: Title and Info -->
+                <div class="flex items-center">
+                    <div
+                        class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mr-3 shadow-md">
+                        <i class="ri-file-list-3-line text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 font-display">Semua Tagihan</h3>
+                        <p class="text-sm text-gray-600">Daftar semua tagihan yang telah dibuat</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-xl font-bold text-gray-800 font-display">Semua Tagihan</h3>
-                    <p class="text-sm text-gray-600">Daftar semua tagihan yang telah dibuat</p>
+
+                <!-- Right Section: Filters and Search -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <input type="text" id="searchInput"
+                            class="w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white/80 backdrop-blur-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300"
+                            placeholder="Cari nama tagihan atau kelas...">
+                        <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    </div>
+
+                    <!-- Filter Controls -->
+                    <div class="flex gap-2">
+                        <!-- Month Filter -->
+                        <div class="relative">
+                            <select id="filterMonth"
+                                class="w-full p-3 pl-10 text-sm border border-gray-300 rounded-lg bg-white/80 backdrop-blur-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 appearance-none cursor-pointer">
+                                <option value="">Semua Bulan</option>
+                                @for ($m = 1; $m <= 12; $m++)
+                                    <option value="{{ $m }}">
+                                        {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+                                    </option>
+                                @endfor
+                            </select>
+                            <i
+                                class="ri-calendar-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                            <i
+                                class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                        </div>
+
+                        <!-- Year Filter -->
+                        <div class="relative">
+                            <select id="filterYear"
+                                class="w-full p-3 pl-10 text-sm border border-gray-300 rounded-lg bg-white/80 backdrop-blur-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 appearance-none cursor-pointer">
+                                <option value="">Semua Tahun</option>
+                                @foreach ($tagihans->pluck('jatuh_tempo')->map(fn($d) => \Carbon\Carbon::parse($d)->year)->unique() as $year)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endforeach
+                            </select>
+                            <i
+                                class="ri-calendar-2-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                            <i
+                                class="ri-arrow-down-s-line absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+                    <button onclick="printTagihan()"
+                        class="px-4 py-2 bg-emerald-600 text-white rounded-xl shadow hover:bg-emerald-700 transition">
+                        <i class="ri-printer-line mr-1"></i> Print
+                    </button>
                 </div>
             </div>
         </div>
@@ -148,18 +201,18 @@
                 <table class="min-w-full divide-y divide-gray-200" id="tagihanTable">
                     <thead class="bg-gradient-to-r from-gray-50 to-green-50/30">
                         <tr>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">No</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">No
+                            </th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Nama
                                 Tagihan</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Jatuh
                                 Tempo</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Jenis
                             </th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Total
-                                Kelas</th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Status
                             </th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Nominal
+                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                                Nominal
                             </th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                                 Progress</th>
@@ -167,9 +220,12 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white/40 backdrop-blur-sm divide-y divide-gray-200">
+                    <tbody id="tagihanBody" class="bg-white/40 backdrop-blur-sm divide-y divide-gray-200">
                         @foreach ($tagihans as $index => $tagihan)
-                            <tr class="hover:bg-white/60 transition-all duration-200">
+                            <tr class="hover:bg-white/60 transition-all duration-200 tagihan-row"
+                                data-nama="{{ strtolower($tagihan->nama_tagihan) }}"
+                                data-bulan="{{ \Carbon\Carbon::parse($tagihan->jatuh_tempo)->month }}"
+                                data-tahun="{{ \Carbon\Carbon::parse($tagihan->jatuh_tempo)->year }}">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500 text-center">
                                     {{ $index + 1 }}
                                 </td>
@@ -191,13 +247,6 @@
                                     <div class="flex items-center">
                                         <i class="ri-bill-line text-gray-800 mr-2"></i>
                                         <span class="text-sm font-semibold text-gray-900">{{ $tagihan->jenis }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <i class="ri-group-line text-gray-800 mr-2"></i>
-                                        <span class="text-sm font-semibold text-gray-900">{{ $tagihan->total_kelas }}
-                                            kelas</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -223,7 +272,7 @@
                                         <span
                                             class="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-gray-500 to-slate-600 text-white shadow-md">
                                             <i class="ri-time-line mr-1.5"></i>
-                                            Belum Dimulai
+                                            Aktif
                                         </span>
                                     @endif
                                 </td>
@@ -248,7 +297,8 @@
                                             title="Lihat Detail">
                                             <i class="ri-eye-line text-lg group-hover:scale-110 transition-transform"></i>
                                         </a>
-                                        <form action="#" method="POST" class="inline"
+                                        <form action="{{ route('admin.tagihan.delete', $tagihan->id) }}" method="POST"
+                                            class="inline"
                                             onsubmit="return confirm('Hapus tagihan {{ $tagihan->nama_tagihan }}?')">
                                             @csrf
                                             @method('DELETE')
@@ -265,6 +315,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="mt-4">
+                    {{ $tagihans->links() }}
+                </div>
             </div>
         @else
             <div class="text-center py-16">
@@ -277,3 +330,116 @@
         @endif
     </div>
 @endsection
+@push('scripts')
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const filterMonth = document.getElementById('filterMonth');
+        const filterYear = document.getElementById('filterYear');
+        const rows = document.querySelectorAll('.tagihan-row');
+
+        function filterTable() {
+            const search = searchInput.value.toLowerCase();
+            const month = filterMonth.value;
+            const year = filterYear.value;
+
+            rows.forEach(row => {
+                const nama = row.dataset.nama;
+                const rowMonth = row.dataset.bulan;
+                const rowYear = row.dataset.tahun;
+
+                const matchSearch = nama.includes(search);
+                const matchMonth = !month || month === rowMonth;
+                const matchYear = !year || year === rowYear;
+
+                row.style.display = (matchSearch && matchMonth && matchYear) ?
+                    '' :
+                    'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterTable);
+        filterMonth.addEventListener('change', filterTable);
+        filterYear.addEventListener('change', filterTable);
+    </script>
+
+    <script>
+        function printTagihan() {
+            const rows = document.querySelectorAll('#tagihanBody tr');
+            let printedRows = '';
+
+            rows.forEach((row, index) => {
+                if (row.style.display !== 'none') {
+                    const cells = row.querySelectorAll('td');
+
+                    printedRows += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${cells[1].innerText}</td>
+                    <td>${cells[2].innerText}</td>
+                    <td>${cells[3].innerText}</td>
+                    <td>${cells[5].innerText}</td>
+                </tr>
+            `;
+                }
+            });
+
+            if (printedRows === '') {
+                alert('Tidak ada data untuk dicetak');
+                return;
+            }
+
+            const printWindow = window.open('', '', 'width=900,height=600');
+
+            printWindow.document.write(`
+        <html>
+        <head>
+            <title>Data Tagihan</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                }
+                h2 {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 12px;
+                }
+                th, td {
+                    border: 1px solid #000;
+                    padding: 6px;
+                }
+                th {
+                    background: #f3f4f6;
+                }
+            </style>
+        </head>
+        <body>
+            <h2>Data Tagihan</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Tagihan</th>
+                        <th>Jatuh Tempo</th>
+                        <th>Jenis</th>
+                        <th>Nominal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${printedRows}
+                </tbody>
+            </table>
+        </body>
+        </html>
+    `);
+
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
+    </script>
+@endpush

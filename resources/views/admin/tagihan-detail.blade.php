@@ -284,7 +284,6 @@
                         show = rowStatus === 'pending';
                         break;
                 }
-
                 row.style.display = show ? '' : 'none';
             });
         }

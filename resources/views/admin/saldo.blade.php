@@ -159,9 +159,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
                         <!-- Ditujukan ke -->
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-3">
@@ -178,10 +175,6 @@
                                     <i class="ri-user-line text-gray-600"></i>
                                 </div>
                             </div>
-                            <p class="text-xs text-gray-500 mt-2 flex items-center">
-                                <i class="ri-information-line mr-1"></i>
-                                Biarkan kosong jika transaksi umum
-                            </p>
                         </div>
                         <!-- Tagihan Terkait -->
                         <div>
@@ -203,6 +196,10 @@
                                     <i class="ri-arrow-down-s-line text-gray-600"></i>
                                 </div>
                             </div>
+                            <p class="text-xs text-gray-500 mt-2 flex items-center">
+                                <i class="ri-information-line mr-1"></i>
+                                Biarkan kosong jika transaksi umum
+                            </p>
                         </div>
                     </div>
                     <!-- Keterangan -->
@@ -235,15 +232,55 @@
     <!-- Daftar Transaksi -->
     <div class="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-green-500/10 border border-white/50 overflow-hidden"
         data-aos="fade-up" data-aos-delay="500">
-        <div class="px-6 py-5 bg-gradient-to-r from-gray-50 to-green-50/30 border-b border-gray-200">
-            <div class="flex items-center">
-                <div
-                    class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mr-3 shadow-md">
-                    <i class="ri-file-list-3-line text-white text-xl"></i>
+        <div class="px-6 py-5 bg-gradient-to-r from-gray-50 to-green-50/30 border-b border-gray-200 space-y-5">
+
+            <div class="flex items-center justify-between flex-wrap gap-4">
+
+                <!-- Left -->
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="ri-file-list-3-line text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 font-display">
+                            Riwayat Transaksi
+                        </h3>
+                        <p class="text-sm text-gray-600">
+                            Semua catatan pemasukan dan pengeluaran kas sekolah
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-xl font-bold text-gray-800 font-display">Riwayat Transaksi</h3>
-                    <p class="text-sm text-gray-600">Semua catatan pemasukan dan pengeluaran kas sekolah</p>
+
+                <!-- Right -->
+                <div class="flex flex-wrap gap-2 items-center">
+                    <div class="relative w-56">
+                        <input type="text" id="searchTransaksi"
+                            class="w-full p-2.5 pl-10 text-sm border border-gray-300 rounded-xl focus:ring-emerald-500 focus:border-emerald-500"
+                            placeholder="Cari transaksi...">
+                        <i class="ri-search-line absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+
+                    <select id="filterTransaksiMonth" class="p-2.5 text-sm border border-gray-300 rounded-xl">
+                        <option value="">Semua Bulan</option>
+                        @for ($m = 1; $m <= 12; $m++)
+                            <option value="{{ $m }}">
+                                {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+                            </option>
+                        @endfor
+                    </select>
+
+                    <select id="filterTransaksiYear" class="p-2.5 text-sm border border-gray-300 rounded-xl">
+                        <option value="">Semua Tahun</option>
+                        @foreach ($saldo->pluck('created_at')->map(fn($d) => \Carbon\Carbon::parse($d)->year)->unique() as $year)
+                            <option value="{{ $year }}">{{ $year }}</option>
+                        @endforeach
+                    </select>
+
+                    <button onclick="printTransaksi()"
+                        class="px-4 py-2 bg-emerald-600 text-white rounded-xl shadow hover:bg-emerald-700">
+                        <i class="ri-printer-line mr-1"></i> Print
+                    </button>
                 </div>
             </div>
         </div>
@@ -269,9 +306,14 @@
                                 Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white/40 backdrop-blur-sm divide-y divide-gray-200">
+                    <tbody id="transaksiBody" class="bg-white/40 backdrop-blur-sm divide-y divide-gray-200">
                         @foreach ($saldo as $transaksi)
-                            <tr class="hover:bg-white/60 transition-all duration-200">
+                            <tr class="hover:bg-white/60 transition-all duration-200 transaksi-row"
+                                data-text="{{ strtolower(
+                                    ($transaksi->keterangan ?? '') . ' ' . ($transaksi->tipe ?? '') . ' ' . ($transaksi->entities ?? ''),
+                                ) }}"
+                                data-bulan="{{ \Carbon\Carbon::parse($transaksi->created_at)->month }}"
+                                data-tahun="{{ \Carbon\Carbon::parse($transaksi->created_at)->year }}">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <i class="ri-calendar-line text-gray-600 mr-2"></i>
@@ -356,6 +398,9 @@
                         </tr>
                     </tfoot>
                 </table>
+                <div class="mt-4">
+                    {{ $saldo->links() }}
+                </div>
             </div>
         @else
             <div class="text-center py-16">
@@ -371,43 +416,93 @@
 
 @push('scripts')
     <script>
-        // Print Function
-        function printTable() {
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>Laporan Transaksi Kas Sekolah</title>
-                    <style>
-                        body { font-family: 'Arial', sans-serif; margin: 30px; }
-                        h1 { color: #059669; text-align: center; margin-bottom: 30px; }
-                        .info { margin-bottom: 30px; padding: 20px; background: #f0fdf4; border-radius: 10px; border-left: 4px solid #059669; }
-                        .info-item { margin-bottom: 8px; font-size: 14px; }
-                        .info-item strong { color: #047857; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                        th, td { border: 1px solid #d1d5db; padding: 12px; text-align: left; font-size: 13px; }
-                        th { background-color: #059669; color: white; font-weight: bold; }
-                        .pemasukan { color: #059669; font-weight: bold; }
-                        .pengeluaran { color: #dc2626; font-weight: bold; }
-                        .total-row { font-weight: bold; background-color: #ecfdf5; border-top: 2px solid #059669; }
-                        .text-center { text-align: center; }
-                    </style>
-                </head>
-                <body>
-                    <h1>📊 Laporan Transaksi Kas Sekolah</h1>
-                    <div class="info">
-                        <div class="info-item"><strong>Total Pemasukan:</strong> Rp {{ number_format($totalPemasukan, 0, ',', '.') }}</div>
-                        <div class="info-item"><strong>Total Pengeluaran:</strong> Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</div>
-                        <div class="info-item"><strong>Saldo Akhir:</strong> Rp {{ number_format($saldoAkhir, 0, ',', '.') }}</div>
-                        <div class="info-item"><strong>Total Transaksi:</strong> {{ $saldo->count() }} transaksi</div>
-                        <div class="info-item"><strong>Dicetak pada:</strong> ${new Date().toLocaleString('id-ID')}</div>
-                    </div>
-                    ${document.getElementById('transaksiTable').outerHTML}
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-            printWindow.print();
+        const searchTransaksi = document.getElementById('searchTransaksi');
+        const filterMonthT = document.getElementById('filterTransaksiMonth');
+        const filterYearT = document.getElementById('filterTransaksiYear');
+        const transaksiRows = document.querySelectorAll('.transaksi-row');
+
+        function filterTransaksi() {
+            const search = searchTransaksi.value.toLowerCase();
+            const month = filterMonthT.value;
+            const year = filterYearT.value;
+
+            transaksiRows.forEach(row => {
+                const text = row.dataset.text;
+                const rMonth = row.dataset.bulan;
+                const rYear = row.dataset.tahun;
+
+                const matchSearch = text.includes(search);
+                const matchMonth = !month || month === rMonth;
+                const matchYear = !year || year === rYear;
+
+                row.style.display = (matchSearch && matchMonth && matchYear) ? '' : 'none';
+            });
+        }
+
+        searchTransaksi.addEventListener('input', filterTransaksi);
+        filterMonthT.addEventListener('change', filterTransaksi);
+        filterYearT.addEventListener('change', filterTransaksi);
+    </script>
+    <script>
+        function printTransaksi() {
+            const rows = document.querySelectorAll('#transaksiBody tr');
+            let html = '';
+            let no = 1;
+
+            rows.forEach(row => {
+                if (row.style.display !== 'none') {
+                    const td = row.querySelectorAll('td');
+
+                    html += `
+                <tr>
+                    <td>${no++}</td>
+                    <td>${td[0].innerText}</td>
+                    <td>${td[1].innerText}</td>
+                    <td>${td[3].innerText}</td>
+                    <td>${td[5].innerText}</td>
+                </tr>
+            `;
+                }
+            });
+
+            if (!html) {
+                alert('Tidak ada data untuk dicetak');
+                return;
+            }
+
+            const win = window.open('', '', 'width=900,height=600');
+            win.document.write(`
+        <html>
+        <head>
+            <title>Riwayat Transaksi</title>
+            <style>
+                body { font-family: Arial; padding: 20px; }
+                h2 { text-align: center; margin-bottom: 20px; }
+                table { width: 100%; border-collapse: collapse; font-size: 12px; }
+                th, td { border: 1px solid #000; padding: 6px; }
+                th { background: #f3f4f6; }
+            </style>
+        </head>
+        <body>
+            <h2>Riwayat Transaksi</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Tanggal</th>
+                        <th>Tipe</th>
+                        <th>Tagihan</th>
+                        <th>Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>${html}</tbody>
+            </table>
+        </body>
+        </html>
+    `);
+
+            win.document.close();
+            win.print();
         }
     </script>
 @endpush

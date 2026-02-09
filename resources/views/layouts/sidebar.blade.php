@@ -21,53 +21,67 @@
         <div>
             <p class="text-xs uppercase text-gray-500 font-bold tracking-wider px-4 mb-3">Menu Utama</p>
             <div class="space-y-1">
+                {{-- Dashboard --}}
                 <a href="{{ route('dashboard.admin') }}"
-                    class="group flex items-center py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl shadow-lg shadow-green-500/50 transform transition-all duration-300 hover:shadow-xl hover:scale-105">
-                    <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center mr-3">
-                        <i class="ri-dashboard-line text-lg"></i>
+                    class="group flex items-center py-3 px-4 rounded-xl transform transition-all duration-300
+        {{ request()->routeIs('dashboard.admin')
+            ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/50 hover:shadow-xl hover:scale-105'
+            : 'text-gray-700 hover:bg-white/60 backdrop-blur-sm hover:shadow-md' }}">
+                    <div
+                        class="w-10 h-10 rounded-lg flex items-center justify-center mr-3
+            {{ request()->routeIs('dashboard.admin') ? 'bg-white/20' : 'bg-green-50 group-hover:bg-green-100' }}">
+                        <i
+                            class="ri-dashboard-line text-lg
+               {{ request()->routeIs('dashboard.admin') ? 'text-white' : 'text-green-600' }}"></i>
                     </div>
                     <span class="font-semibold">Dashboard</span>
                 </a>
 
+                {{-- Tagihan Kas --}}
                 <a href="{{ route('admin.tagihan.index') }}"
-                    class="group flex items-center py-3 px-4 text-gray-700 hover:bg-white/60 backdrop-blur-sm rounded-xl transition-all duration-300 hover:shadow-md">
+                    class="group flex items-center py-3 px-4 rounded-xl transition-all duration-300
+        {{ request()->routeIs('admin.tagihan.*')
+            ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/40'
+            : 'text-gray-700 hover:bg-white/60 backdrop-blur-sm hover:shadow-md' }}">
                     <div
-                        class="w-10 h-10 bg-blue-50 group-hover:bg-blue-100 rounded-lg flex items-center justify-center mr-3 transition-colors">
-                        <i class="ri-bill-line text-lg text-blue-600"></i>
+                        class="w-10 h-10 rounded-lg flex items-center justify-center mr-3
+            {{ request()->routeIs('admin.tagihan.*') ? 'bg-white/20' : 'bg-blue-50 group-hover:bg-blue-100' }}">
+                        <i
+                            class="ri-bill-line text-lg
+               {{ request()->routeIs('admin.tagihan.*') ? 'text-white' : 'text-blue-600' }}"></i>
                     </div>
                     <span class="font-semibold">Tagihan Kas</span>
                 </a>
 
+                {{-- Saldo --}}
                 <a href="{{ route('admin.saldo.index') }}"
-                    class="group flex items-center py-3 px-4 text-gray-700 hover:bg-white/60 backdrop-blur-sm rounded-xl transition-all duration-300 hover:shadow-md">
+                    class="group flex items-center py-3 px-4 rounded-xl transition-all duration-300
+        {{ request()->routeIs('admin.saldo.*')
+            ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/40'
+            : 'text-gray-700 hover:bg-white/60 backdrop-blur-sm hover:shadow-md' }}">
                     <div
-                        class="w-10 h-10 bg-amber-50 group-hover:bg-amber-100 rounded-lg flex items-center justify-center mr-3 transition-colors">
-                        <i class="ri-wallet-line text-lg text-amber-600"></i>
+                        class="w-10 h-10 rounded-lg flex items-center justify-center mr-3
+            {{ request()->routeIs('admin.saldo.*') ? 'bg-white/20' : 'bg-amber-50 group-hover:bg-amber-100' }}">
+                        <i
+                            class="ri-wallet-line text-lg
+                {{ request()->routeIs('admin.saldo.*') ? 'text-white' : 'text-amber-600' }}"></i>
                     </div>
                     <span class="font-semibold">Saldo</span>
                 </a>
-
-                <a href="rekapitulasi.html"
-                    class="group flex items-center py-3 px-4 text-gray-700 hover:bg-white/60 backdrop-blur-sm rounded-xl transition-all duration-300 hover:shadow-md">
-                    <div
-                        class="w-10 h-10 bg-purple-50 group-hover:bg-purple-100 rounded-lg flex items-center justify-center mr-3 transition-colors">
-                        <i class="ri-file-chart-line text-lg text-purple-600"></i>
-                    </div>
-                    <span class="font-semibold">Rekapitulasi</span>
-                </a>
             </div>
+
         </div>
 
         <div>
             <p class="text-xs uppercase text-gray-500 font-bold tracking-wider px-4 mb-3">Akun</p>
             <div class="space-y-1">
-                <a href="#"
+                <a href="{{ route('users') }}"
                     class="group flex items-center py-3 px-4 text-gray-700 hover:bg-white/60 backdrop-blur-sm rounded-xl transition-all duration-300 hover:shadow-md">
                     <div
                         class="w-10 h-10 bg-green-50 group-hover:bg-green-100 rounded-lg flex items-center justify-center mr-3 transition-colors">
-                        <i class="ri-user-line text-lg text-green-600"></i>
+                        <i class="ri-user-add-line text-lg text-green-600"></i>
                     </div>
-                    <span class="font-semibold">Profil Saya</span>
+                    <span class="font-semibold">Kelola User</span>
                 </a>
 
                 <form action="{{ route('logout') }}" method="POST" class="m-0">

@@ -2,18 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Saldo;
+use App\Models\Tagihan;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 class AdminController
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        return view ('admin.dashboard');
+        $year = now()->year;
+
+        // TOTAL KAS (pemasukan - pengeluaran)
+        $totalMasuk = Saldo::pemasukan()->sum('saldo');
+        $totalKeluar = Saldo::pengeluaran()->sum('saldo');
+        $totalKas = $totalMasuk - $totalKeluar;
+
+        // TAGIHAN
+        $tagihanAktif = Tagihan::aktif()->count();
+        $tagihanSelesai = Tagihan::selesai()->count();
+
+        // PEMBAYARAN BARU (bulan ini)
+        $pembayaranBaru = Saldo::pemasukan()
+            ->whereMonth('created_at', now()->month)
+            ->count();
+
+        $months = [];
+        $chartData = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+
+            $months[] = $date->format('M');
+
+            $totalSaldo = Saldo::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->sum('saldo');
+
+            $chartData[] = $totalSaldo;
+        }
+
+        // Aktivitas terbaru
+        $aktivitas = Saldo::with('tagihan')
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'totalKas',
+            'tagihanAktif',
+            'tagihanSelesai',
+            'pembayaranBaru',
+            'months',
+            'chartData',
+            'aktivitas'
+        ));
     }
+
 
     /**
      * Show the form for creating a new resource.

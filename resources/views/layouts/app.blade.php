@@ -19,7 +19,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="/resources/css/styles.css">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>

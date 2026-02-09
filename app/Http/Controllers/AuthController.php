@@ -20,6 +20,12 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    public function create()
+    {
+        $users = User::latest()->get();
+        return view('auth.users', compact('users'));
+    }
+
     public function adduser(Request $request)
     {
         $data = $request->validate([
@@ -50,11 +56,31 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+
             $request->session()->regenerate();
-            return redirect()->route('dashboard.admin')->with('success', 'Login berhasil');
-        } else {
-            return redirect()->back()->withErrors(['email' => 'Email atau password salah'])->withInput();
+
+            $user = Auth::user();
+
+            if ($user->role == 'admin') {
+                return redirect()->route('dashboard.admin')
+                    ->with('success', 'Login berhasil sebagai Admin');
+            }
+
+            if ($user->role == 'kelas') {
+                return redirect()->route('kelas.dashboard')
+                    ->with('success', 'Login berhasil sebagai Kelas');
+            }
+
+            // kalau role tidak dikenal
+            Auth::logout();
+            return redirect()->back()->withErrors([
+                'email' => 'Role tidak dikenali'
+            ]);
         }
+
+        return redirect()->back()
+            ->withErrors(['email' => 'Email atau password salah'])
+            ->withInput();
     }
 
     public function logout(Request $request)
@@ -65,5 +91,22 @@ class AuthController extends Controller
         return redirect()->route('show.login')->with('success', 'Logout berhasil');
     }
 
+    public function profil(String $id)
+    {
+        return view('auth.profile');
+    }
 
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Optional: jangan biarkan user hapus dirinya sendiri
+        if ($user->id == auth()->id()) {
+            return back()->with('error', 'Tidak bisa menghapus akun sendiri.');
+        }
+
+        $user->delete();
+
+        return back()->with('success', 'User berhasil dihapus.');
+    }
 }
