@@ -31,14 +31,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::middleware(['auth', 'role:kelas'])->group(function () {
     Route::get('/dashboard', [KelasController::class, 'dashboard'])->name('kelas.dashboard');
-    Route::get('/tagihan/{id}', [KelasController::class, 'showTagihan'])->name('kelas.tagihan.show');
-    Route::get('/stats', [KelasController::class, 'getStats'])->name('kelas.stats');
-    Route::get('/activities', [KelasController::class, 'getRecentActivities'])->name('kelas.activities');
-    Route::get('/pending', [KelasController::class, 'getPendingTagihan'])->name('kelas.pending');
-    Route::get('/completed', [KelasController::class, 'getCompletedTagihan'])->name('kelas.completed');
-    Route::get('/profile', [KelasController::class, 'profile'])->name('kelas.profile');
-    Route::put('/profile', [KelasController::class, 'updateProfile'])->name('kelas.profile.update');
-    Route::get('/export-pdf', [KelasController::class, 'exportTagihanPdf'])->name('kelas.export-pdf');
+    // Route::get('/tagihan/{id}', [KelasController::class, 'showTagihan'])->name('kelas.tagihan.show');
+    // Route::get('/stats', [KelasController::class, 'getStats'])->name('kelas.stats');
+    // Route::get('/activities', [KelasController::class, 'getRecentActivities'])->name('kelas.activities');
+    // Route::get('/pending', [KelasController::class, 'getPendingTagihan'])->name('kelas.pending');
+    // Route::get('/completed', [KelasController::class, 'getCompletedTagihan'])->name('kelas.completed');
+    // Route::get('/profile', [KelasController::class, 'profile'])->name('kelas.profile');
+    // Route::put('/profile', [KelasController::class, 'updateProfile'])->name('kelas.profile.update');
+    // Route::get('/export-pdf', [KelasController::class, 'exportTagihanPdf'])->name('kelas.export-pdf');
 });
 
 Route::middleware(['auth', 'role:admin,kelas'])->group(function () {
