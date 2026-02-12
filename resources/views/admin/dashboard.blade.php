@@ -77,14 +77,7 @@
             <div class="flex justify-between items-center mb-6">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 font-display">Statistik Saldo</h2>
-                    <p class="text-gray-500 text-sm">6 Bulan Terakhir</p>
                 </div>
-                <select
-                    class="bg-white/60 backdrop-blur-sm border-2 border-gray-200 rounded-xl px-4 py-2 text-sm font-semibold focus:outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/10 transition-all">
-                    <option>2024</option>
-                    <option>2023</option>
-                    <option>2022</option>
-                </select>
             </div>
             <div id="chart"></div>
         </div>

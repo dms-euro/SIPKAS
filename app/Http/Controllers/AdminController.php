@@ -16,16 +16,13 @@ class AdminController
     {
         $year = now()->year;
 
-        // TOTAL KAS (pemasukan - pengeluaran)
-        $totalMasuk = Saldo::pemasukan()->sum('saldo');
-        $totalKeluar = Saldo::pengeluaran()->sum('saldo');
-        $totalKas = $totalMasuk - $totalKeluar;
+        $totalPemasukan = Saldo::where('tipe', 'pemasukan')->sum('saldo');
+        $totalPengeluaran = Saldo::where('tipe', 'pengeluaran')->sum('saldo');
+        $totalKas = $totalPemasukan- $totalPengeluaran;
 
-        // TAGIHAN
         $tagihanAktif = Tagihan::aktif()->count();
         $tagihanSelesai = Tagihan::selesai()->count();
 
-        // PEMBAYARAN BARU (bulan ini)
         $pembayaranBaru = Saldo::pemasukan()
             ->whereMonth('created_at', now()->month)
             ->count();

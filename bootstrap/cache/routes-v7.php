@@ -13,7 +13,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::evLGWv1if35GnaCl',
+            '_route' => 'generated::TGTtC5Q89iFbOnfP',
           ),
           1 => NULL,
           2 => 
@@ -220,142 +220,6 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      '/stats' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'kelas.stats',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
-      '/activities' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'kelas.activities',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
-      '/pending' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'kelas.pending',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
-      '/completed' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'kelas.completed',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
-      '/profile' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'kelas.profile',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-        1 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'kelas.profile.update',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'PUT' => 0,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
-      '/export-pdf' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'kelas.export-pdf',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
       '/logout' => 
       array (
         0 => 
@@ -378,7 +242,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/tagihan/(?|([^/]++)(*:27)|selesai/([^/]++)(*:50)|delete/([^/]++)(*:72)|([^/]++)(*:87))|/s(?|aldo/([^/]++)(*:113)|torage/(.*)(*:132))|/user/delete/([^/]++)(*:162))/?$}sDu',
+      0 => '{^(?|/tagihan/(?|([^/]++)(*:27)|selesai/([^/]++)(*:50)|delete/([^/]++)(*:72))|/s(?|aldo/([^/]++)(*:98)|torage/(.*)(*:116))|/user/delete/([^/]++)(*:146))/?$}sDu',
     ),
     3 => 
     array (
@@ -415,7 +279,7 @@ app('router')->setCompiledRoutes(
           ),
           1 => 
           array (
-            0 => 'id',
+            0 => 'nama_tagihan',
           ),
           2 => 
           array (
@@ -449,30 +313,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      87 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'kelas.tagihan.show',
-          ),
-          1 => 
-          array (
-            0 => 'id',
-          ),
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      113 => 
+      98 => 
       array (
         0 => 
         array (
@@ -494,7 +335,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      132 => 
+      116 => 
       array (
         0 => 
         array (
@@ -517,7 +358,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      162 => 
+      146 => 
       array (
         0 => 
         array (
@@ -554,7 +395,7 @@ app('router')->setCompiledRoutes(
   ),
   'attributes' => 
   array (
-    'generated::evLGWv1if35GnaCl' => 
+    'generated::TGTtC5Q89iFbOnfP' => 
     array (
       'methods' => 
       array (
@@ -582,8 +423,8 @@ app('router')->setCompiledRoutes(
                     return response(\\Illuminate\\Support\\Facades\\View::file(\'D:\\\\Dev\\\\Client Project\\\\SIPKAS\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Configuration\'.\'/../resources/health-up.blade.php\', [
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
-                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"00000000000002f30000000000000000";}}',
-        'as' => 'generated::evLGWv1if35GnaCl',
+                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"00000000000004d60000000000000000";}}',
+        'as' => 'generated::TGTtC5Q89iFbOnfP',
       ),
       'fallback' => false,
       'defaults' => 
@@ -835,7 +676,7 @@ app('router')->setCompiledRoutes(
       array (
         0 => 'POST',
       ),
-      'uri' => 'tagihan/selesai/{id}',
+      'uri' => 'tagihan/selesai/{nama_tagihan}',
       'action' => 
       array (
         'middleware' => 
@@ -1174,317 +1015,6 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'kelas.tagihan.show' => 
-    array (
-      'methods' => 
-      array (
-        0 => 'GET',
-        1 => 'HEAD',
-      ),
-      'uri' => 'tagihan/{id}',
-      'action' => 
-      array (
-        'middleware' => 
-        array (
-          0 => 'web',
-          1 => 'auth',
-          2 => 'role:kelas',
-        ),
-        'uses' => 'App\\Http\\Controllers\\KelasController@showTagihan',
-        'controller' => 'App\\Http\\Controllers\\KelasController@showTagihan',
-        'namespace' => NULL,
-        'prefix' => '',
-        'where' => 
-        array (
-        ),
-        'as' => 'kelas.tagihan.show',
-      ),
-      'fallback' => false,
-      'defaults' => 
-      array (
-      ),
-      'wheres' => 
-      array (
-      ),
-      'bindingFields' => 
-      array (
-      ),
-      'lockSeconds' => NULL,
-      'waitSeconds' => NULL,
-      'withTrashed' => false,
-    ),
-    'kelas.stats' => 
-    array (
-      'methods' => 
-      array (
-        0 => 'GET',
-        1 => 'HEAD',
-      ),
-      'uri' => 'stats',
-      'action' => 
-      array (
-        'middleware' => 
-        array (
-          0 => 'web',
-          1 => 'auth',
-          2 => 'role:kelas',
-        ),
-        'uses' => 'App\\Http\\Controllers\\KelasController@getStats',
-        'controller' => 'App\\Http\\Controllers\\KelasController@getStats',
-        'namespace' => NULL,
-        'prefix' => '',
-        'where' => 
-        array (
-        ),
-        'as' => 'kelas.stats',
-      ),
-      'fallback' => false,
-      'defaults' => 
-      array (
-      ),
-      'wheres' => 
-      array (
-      ),
-      'bindingFields' => 
-      array (
-      ),
-      'lockSeconds' => NULL,
-      'waitSeconds' => NULL,
-      'withTrashed' => false,
-    ),
-    'kelas.activities' => 
-    array (
-      'methods' => 
-      array (
-        0 => 'GET',
-        1 => 'HEAD',
-      ),
-      'uri' => 'activities',
-      'action' => 
-      array (
-        'middleware' => 
-        array (
-          0 => 'web',
-          1 => 'auth',
-          2 => 'role:kelas',
-        ),
-        'uses' => 'App\\Http\\Controllers\\KelasController@getRecentActivities',
-        'controller' => 'App\\Http\\Controllers\\KelasController@getRecentActivities',
-        'namespace' => NULL,
-        'prefix' => '',
-        'where' => 
-        array (
-        ),
-        'as' => 'kelas.activities',
-      ),
-      'fallback' => false,
-      'defaults' => 
-      array (
-      ),
-      'wheres' => 
-      array (
-      ),
-      'bindingFields' => 
-      array (
-      ),
-      'lockSeconds' => NULL,
-      'waitSeconds' => NULL,
-      'withTrashed' => false,
-    ),
-    'kelas.pending' => 
-    array (
-      'methods' => 
-      array (
-        0 => 'GET',
-        1 => 'HEAD',
-      ),
-      'uri' => 'pending',
-      'action' => 
-      array (
-        'middleware' => 
-        array (
-          0 => 'web',
-          1 => 'auth',
-          2 => 'role:kelas',
-        ),
-        'uses' => 'App\\Http\\Controllers\\KelasController@getPendingTagihan',
-        'controller' => 'App\\Http\\Controllers\\KelasController@getPendingTagihan',
-        'namespace' => NULL,
-        'prefix' => '',
-        'where' => 
-        array (
-        ),
-        'as' => 'kelas.pending',
-      ),
-      'fallback' => false,
-      'defaults' => 
-      array (
-      ),
-      'wheres' => 
-      array (
-      ),
-      'bindingFields' => 
-      array (
-      ),
-      'lockSeconds' => NULL,
-      'waitSeconds' => NULL,
-      'withTrashed' => false,
-    ),
-    'kelas.completed' => 
-    array (
-      'methods' => 
-      array (
-        0 => 'GET',
-        1 => 'HEAD',
-      ),
-      'uri' => 'completed',
-      'action' => 
-      array (
-        'middleware' => 
-        array (
-          0 => 'web',
-          1 => 'auth',
-          2 => 'role:kelas',
-        ),
-        'uses' => 'App\\Http\\Controllers\\KelasController@getCompletedTagihan',
-        'controller' => 'App\\Http\\Controllers\\KelasController@getCompletedTagihan',
-        'namespace' => NULL,
-        'prefix' => '',
-        'where' => 
-        array (
-        ),
-        'as' => 'kelas.completed',
-      ),
-      'fallback' => false,
-      'defaults' => 
-      array (
-      ),
-      'wheres' => 
-      array (
-      ),
-      'bindingFields' => 
-      array (
-      ),
-      'lockSeconds' => NULL,
-      'waitSeconds' => NULL,
-      'withTrashed' => false,
-    ),
-    'kelas.profile' => 
-    array (
-      'methods' => 
-      array (
-        0 => 'GET',
-        1 => 'HEAD',
-      ),
-      'uri' => 'profile',
-      'action' => 
-      array (
-        'middleware' => 
-        array (
-          0 => 'web',
-          1 => 'auth',
-          2 => 'role:kelas',
-        ),
-        'uses' => 'App\\Http\\Controllers\\KelasController@profile',
-        'controller' => 'App\\Http\\Controllers\\KelasController@profile',
-        'namespace' => NULL,
-        'prefix' => '',
-        'where' => 
-        array (
-        ),
-        'as' => 'kelas.profile',
-      ),
-      'fallback' => false,
-      'defaults' => 
-      array (
-      ),
-      'wheres' => 
-      array (
-      ),
-      'bindingFields' => 
-      array (
-      ),
-      'lockSeconds' => NULL,
-      'waitSeconds' => NULL,
-      'withTrashed' => false,
-    ),
-    'kelas.profile.update' => 
-    array (
-      'methods' => 
-      array (
-        0 => 'PUT',
-      ),
-      'uri' => 'profile',
-      'action' => 
-      array (
-        'middleware' => 
-        array (
-          0 => 'web',
-          1 => 'auth',
-          2 => 'role:kelas',
-        ),
-        'uses' => 'App\\Http\\Controllers\\KelasController@updateProfile',
-        'controller' => 'App\\Http\\Controllers\\KelasController@updateProfile',
-        'namespace' => NULL,
-        'prefix' => '',
-        'where' => 
-        array (
-        ),
-        'as' => 'kelas.profile.update',
-      ),
-      'fallback' => false,
-      'defaults' => 
-      array (
-      ),
-      'wheres' => 
-      array (
-      ),
-      'bindingFields' => 
-      array (
-      ),
-      'lockSeconds' => NULL,
-      'waitSeconds' => NULL,
-      'withTrashed' => false,
-    ),
-    'kelas.export-pdf' => 
-    array (
-      'methods' => 
-      array (
-        0 => 'GET',
-        1 => 'HEAD',
-      ),
-      'uri' => 'export-pdf',
-      'action' => 
-      array (
-        'middleware' => 
-        array (
-          0 => 'web',
-          1 => 'auth',
-          2 => 'role:kelas',
-        ),
-        'uses' => 'App\\Http\\Controllers\\KelasController@exportTagihanPdf',
-        'controller' => 'App\\Http\\Controllers\\KelasController@exportTagihanPdf',
-        'namespace' => NULL,
-        'prefix' => '',
-        'where' => 
-        array (
-        ),
-        'as' => 'kelas.export-pdf',
-      ),
-      'fallback' => false,
-      'defaults' => 
-      array (
-      ),
-      'wheres' => 
-      array (
-      ),
-      'bindingFields' => 
-      array (
-      ),
-      'lockSeconds' => NULL,
-      'waitSeconds' => NULL,
-      'withTrashed' => false,
-    ),
     'logout' => 
     array (
       'methods' => 
@@ -1539,7 +1069,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000002ea0000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000004db0000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,

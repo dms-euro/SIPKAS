@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Manajemen Tagiha')
+@section('title', 'Manajemen Tagihan')
 @section('content')
     <!-- Form Container -->
     <div class="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-green-500/10 border border-white/50 overflow-hidden mb-8"
@@ -45,8 +45,11 @@
                                 </div>
                                 <input type="text" name="nama_tagihan" value="{{ old('nama_tagihan') }}" required
                                     class="w-full pl-12 pr-4 py-4 bg-white/60 backdrop-blur-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-300 outline-none font-semibold"
-                                    placeholder="Contoh: Kas Bulanan November 2024" autocomplete="off">
+                                    placeholder="Contoh: Infaq Jumat/1-Januari" autocomplete="off">
                             </div>
+                            <p class="text-xs text-gray-400">
+                                Gunakan nama yang unik agar tidak bentrok dengan tagihan lain.
+                            </p>
                         </div>
                         <!-- Jenis Tagihan -->
                         <div>
@@ -80,7 +83,6 @@
                                     <i class="ri-money-dollar-circle-line text-gray-800 text-xl"></i>
                                 </div>
                                 <input type="number" name="jumlah" value="{{ old('jumlah') }}" required min="0"
-                                    step="1000"
                                     class="w-full pl-12 pr-4 py-4 bg-white/60 backdrop-blur-sm border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-300 outline-none font-semibold"
                                     placeholder="50000" autocomplete="off">
                             </div>
@@ -297,8 +299,8 @@
                                             title="Lihat Detail">
                                             <i class="ri-eye-line text-lg group-hover:scale-110 transition-transform"></i>
                                         </a>
-                                        <form action="{{ route('admin.tagihan.delete', $tagihan->id) }}" method="POST"
-                                            class="inline"
+                                        <form action="{{ route('admin.tagihan.delete', $tagihan->nama_tagihan) }}"
+                                            method="POST" class="inline"
                                             onsubmit="return confirm('Hapus tagihan {{ $tagihan->nama_tagihan }}?')">
                                             @csrf
                                             @method('DELETE')

@@ -1,24 +1,35 @@
 @extends('layouts.app')
-@section('title', 'Manajemen Tagiha')
+@section('title', 'Manajemen Tagihan')
 @section('content')
+    <!-- Header Informasi Tagihan -->
     <!-- Header Informasi Tagihan -->
     <div class="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-green-500/10 border border-white/50 overflow-hidden mb-8"
         data-aos="fade-up" data-aos-delay="200">
         <div class="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-5 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2">
-            </div>
-            <div class="relative z-10 flex items-center">
-                <div
-                    class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center mr-4 border border-white/30 shadow-lg">
-                    <i class="ri-bill-line text-white text-2xl"></i>
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="relative z-10 flex items-center justify-between">
+                <div class="flex items-center">
+                    <div
+                        class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center mr-4 border border-white/30 shadow-lg">
+                        <i class="ri-bill-line text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">
+                            {{ $nama_tagihan }}
+                        </h2>
+                        <p class="text-green-100 text-sm mt-1">
+                            {{ $selesai }} selesai • {{ $pending }} pending • Total
+                            {{ $tagihans->count() }} kelas
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-white font-display">{{ $nama_tagihan }}</h2>
-                    <p class="text-green-100 text-sm mt-1">
-                        {{ $selesai }} selesai • {{ $pending }} pending • Total
-                        {{ $tagihans->count() }} kelas
-                    </p>
-                </div>
+                <a href="{{ route('admin.tagihan.index') }}"
+                    class="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30
+                        text-white rounded-lg backdrop-blur-sm border border-white/30
+                        transition duration-200 text-sm font-medium">
+                    <i class="ri-arrow-left-line text-lg"></i>
+                    <span>Kembali</span>
+                </a>
             </div>
         </div>
 

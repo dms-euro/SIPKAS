@@ -17,7 +17,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/tagihan/admin', [TagihanController::class, 'index'])->name('admin.tagihan.index');
     Route::post('/tagihan/store', [TagihanController::class, 'store'])->name('admin.tagihan.store');
     Route::get('/tagihan/{nama_tagihan}', [TagihanController::class, 'show'])->name('admin.tagihan.show');
-    Route::post('/tagihan/selesai/{id}', [TagihanController::class, 'selesai'])->name('admin.tagihan.selesai');
+    Route::post('/tagihan/selesai/{nama_tagihan}', [TagihanController::class, 'selesai'])->name('admin.tagihan.selesai');
     Route::delete('/tagihan/delete/{id}', [TagihanController::class, 'destroy'])->name('admin.tagihan.delete');
 
     Route::get('/saldo/admin', [SaldoController::class, 'index'])->name('admin.saldo.index');
@@ -31,14 +31,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::middleware(['auth', 'role:kelas'])->group(function () {
     Route::get('/dashboard', [KelasController::class, 'dashboard'])->name('kelas.dashboard');
-    // Route::get('/tagihan/{id}', [KelasController::class, 'showTagihan'])->name('kelas.tagihan.show');
-    // Route::get('/stats', [KelasController::class, 'getStats'])->name('kelas.stats');
-    // Route::get('/activities', [KelasController::class, 'getRecentActivities'])->name('kelas.activities');
-    // Route::get('/pending', [KelasController::class, 'getPendingTagihan'])->name('kelas.pending');
-    // Route::get('/completed', [KelasController::class, 'getCompletedTagihan'])->name('kelas.completed');
-    // Route::get('/profile', [KelasController::class, 'profile'])->name('kelas.profile');
-    // Route::put('/profile', [KelasController::class, 'updateProfile'])->name('kelas.profile.update');
-    // Route::get('/export-pdf', [KelasController::class, 'exportTagihanPdf'])->name('kelas.export-pdf');
 });
 
 Route::middleware(['auth', 'role:admin,kelas'])->group(function () {

@@ -27,7 +27,7 @@
                 <!-- Name Field -->
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-3">
-                        <span class="text-red-500">*</span> Nama Lengkap
+                        <span class="text-red-500">*</span> Nama
                     </label>
 
                     <div class="relative group">

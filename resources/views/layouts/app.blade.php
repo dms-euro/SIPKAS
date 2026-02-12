@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title' ?? SIPKAS)</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Remix Icons -->
@@ -25,12 +26,10 @@
 
 </head>
 
-<body class="bg-gradient-to-br from-slate-50 via-green-50/30 to-emerald-50/50 min-h-screen relative overflow-x-hidden">
+<body class="bg-green-100/10 min-h-screen relative overflow-x-hidden">
 
     {{-- Backgroun --}}
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-green-400/20 to-emerald-500/20 rounded-full blur-3xl animate-pulse"
-            style="animation-duration: 4s;"></div>
         <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-teal-400/20 to-green-500/20 rounded-full blur-3xl animate-pulse"
             style="animation-duration: 5s; animation-delay: 1s;"></div>
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-emerald-400/10 to-green-400/10 rounded-full blur-3xl animate-pulse"

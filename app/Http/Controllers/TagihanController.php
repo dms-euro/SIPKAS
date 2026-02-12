@@ -13,7 +13,6 @@ class TagihanController extends Controller
     public function index()
     {
         $tagihans = Tagihan::select(
-            'id',
             'nama_tagihan',
             'jatuh_tempo',
             'jumlah',
@@ -22,17 +21,18 @@ class TagihanController extends Controller
             ->selectRaw('COUNT(*) as total_kelas')
             ->selectRaw("SUM(status = 'selesai') as selesai")
             ->selectRaw("SUM(status = 'pending') as pending")
-            ->groupBy('id','nama_tagihan', 'jatuh_tempo', 'jumlah','jenis')
+            ->groupBy('nama_tagihan', 'jatuh_tempo', 'jumlah', 'jenis')
             ->simplePaginate(15);
 
         return view('admin.tagihan', compact('tagihans'));
     }
 
 
+
     public function store(Request $request)
     {
         $request->validate([
-            'nama_tagihan' => 'required',
+            'nama_tagihan' => 'required|unique:tagihans,nama_tagihan',
             'jumlah' => 'nullable',
             'jenis' => 'required',
             'jatuh_tempo' => 'required|date',
@@ -107,9 +107,9 @@ class TagihanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $nama_tagihan)
     {
-        $tagihan = Tagihan::findOrFail($id);
+        $tagihan = Tagihan::findOrFail($nama_tagihan);
         $tagihan->delete();
         return redirect()->back()->with('success', 'Data Tagihan sudah di hapus');
     }
